@@ -1,0 +1,12 @@
+docker run -d --name sonarqube -p 9000:9000 sonarqube:latest
+
+dotnet tool install --global dotnet-coverage
+dotnet tool install --global dotnet-sonarscanner
+
+dotnet sonarscanner begin /k:"Murali_Scan" /d:sonar.login="admin" /d:sonar.password="admin1" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
+
+dotnet build --no-incremental
+
+dotnet-coverage collect "dotnet test" -f xml  -o coverage.xml
+
+dotnet sonarscanner end /d:sonar.login="admin" /d:sonar.password="admin1" 
